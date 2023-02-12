@@ -57,6 +57,9 @@ dependencies {
     //chatting
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 
 
 }
