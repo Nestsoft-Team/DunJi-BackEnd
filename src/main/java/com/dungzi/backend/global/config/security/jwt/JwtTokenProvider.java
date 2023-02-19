@@ -29,8 +29,8 @@ public class JwtTokenProvider {
     @Value("${JWT_TOKEN_SECRET_KEY}") //yml 파일에 설정한 변수명
     private String secretKey;
 
-    public final String ACCESS_TOKEN_HEADER_NAME = "x-access-token";
-    public final String REFRESH_TOKEN_HEADER_NAME = "x-refresh-token";
+    public static final String ACCESS_TOKEN_HEADER_NAME = "x-access-token";
+    public static final String REFRESH_TOKEN_HEADER_NAME = "x-refresh-token";
 
     // access, refresh 토큰 유효기간 : 각 1시간, 30일
     public final int ACCESS_COOKIE_MAX_AGE = 60*60; // 1시간
