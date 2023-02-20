@@ -32,9 +32,9 @@ public class ChatRoom {
     @Type(type = "uuid-char")
     private UUID chatRoomId;
 
-    @OneToMany(mappedBy = "chatRoom",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
+//    @OneToMany(mappedBy = "chatRoom",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//    @Builder.Default
+//    private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
 
 
 }

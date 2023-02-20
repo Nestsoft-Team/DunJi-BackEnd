@@ -1,6 +1,11 @@
 package com.dungzi.backend.domain.chat.domain;
 
 import com.dungzi.backend.domain.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -49,5 +54,8 @@ public class ChatMessage {
     private User sender;
 
     @CreationTimestamp
+    @JsonSerialize(using= LocalDateTimeSerializer.class)
+    @JsonDeserialize(using= LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime sendDate;
 }
