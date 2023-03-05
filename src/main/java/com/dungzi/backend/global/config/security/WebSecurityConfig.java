@@ -31,9 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/v1/login/**").hasRole("USER")
                 .antMatchers("/", "/**").permitAll() //그 외 요청들은 누구나 접근 허용
 //                .antMatchers("/api/test/hello").permitAll()
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, authService),
-                        UsernamePasswordAuthenticationFilter.class);
+//                .and()
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, authService),
+//                        UsernamePasswordAuthenticationFilter.class)
         //JwtAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 전에 넣음
+        ;
     }
 }

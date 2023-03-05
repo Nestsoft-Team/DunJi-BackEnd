@@ -1,5 +1,8 @@
 # DunJi-BackEnd
 
+### Infra 구성도 (미완)
+![image](https://user-images.githubusercontent.com/91772497/221348143-f4f03dd6-d149-4026-8254-7a27b0723877.png)
+
 
 
 ### Commit Convention

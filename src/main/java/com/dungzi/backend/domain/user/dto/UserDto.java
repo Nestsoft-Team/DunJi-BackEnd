@@ -14,7 +14,7 @@ public class UserDto {
 
     private String userId;
     private String ci;
-//    private String token;
+    //    private String token;
 //    private String userName;
     private String nickname;
     private String phoneNum;
@@ -32,7 +32,7 @@ public class UserDto {
         if(userId != null){
             uuid = UUID.fromString(userId);
         }
-    
+
         return User.builder()
                 .userId(uuid)
                 .ci(ci)
@@ -40,12 +40,12 @@ public class UserDto {
 //                .userName(userName)
                 .nickname(nickname)
                 .phoneNum(phoneNum)
-                .userType(userType)
+//                .userType(userType)
                 .gender(gender)
-                .authCheck(authCheck)
+//                .authCheck(authCheck)
                 .email(email)
                 .profileImg(profileImg)
-                .univName(univName)
+//                .univName(univName)
 //                .regDate(regDate)
                 .delDate(delDate)
                 .build();

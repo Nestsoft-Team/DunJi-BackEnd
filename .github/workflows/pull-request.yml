@@ -1,0 +1,23 @@
+name: Notification on PR
+
+on:
+  pull_request:
+    branches: [ main, staging, feature/discord ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_USERNAME: 둥지봇
+      uses: Ilshidur/action-discord@master
+      with:
+        args: 'A new PR has been created at back-project'
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: Ilshidur/action-discord@master

@@ -14,10 +14,17 @@ public class SwaggerConfig {
     private static final String BASIC_API_PATH="/api/v1";
 
     @Bean
-    public GroupedOpenApi login() {
+    public GroupedOpenApi user() {
         return GroupedOpenApi.builder()
-                .group("login")
+                .group("user")
                 .pathsToMatch(BASIC_API_PATH+"/users/**")
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi auth() {
+        return GroupedOpenApi.builder()
+                .group("auth")
+                .pathsToMatch(BASIC_API_PATH+"/auth/**")
                 .build();
     }
     @Bean
@@ -25,6 +32,13 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("chat")
                 .pathsToMatch(BASIC_API_PATH+"/chat/**")
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi review() {
+        return GroupedOpenApi.builder()
+                .group("review")
+                .pathsToMatch(BASIC_API_PATH+"/review/**")
                 .build();
     }
     @Bean

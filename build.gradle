@@ -49,6 +49,9 @@ dependencies {
     //swagger
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
 
+    //s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -57,6 +60,8 @@ dependencies {
     //chatting
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    //validator
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 
 }

@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collection;
 
 @Slf4j
@@ -30,6 +32,14 @@ public class TestController {
         log.info("[API] test/hello");
         return CommonResponse.toResponse(CommonCode.OK, "hello");
     }
+
+    @GetMapping("/redirect")
+    public void testRedirect(HttpServletResponse response) throws IOException {
+//        String redirect_uri="http://www.google.com"; //http://localhost:3000/login/kakao
+        String redirect_uri="http://localhost:3000/chat";
+        response.sendRedirect(redirect_uri);
+    }
+
 
     @GetMapping("/checkToken/{tokenType}")
 //    public CommonResponse checkAccessToken(HttpServletRequest httpServletRequest) { //@CookieValue("x-access-token") String accessToken

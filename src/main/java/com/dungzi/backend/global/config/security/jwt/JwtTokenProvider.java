@@ -1,8 +1,7 @@
 package com.dungzi.backend.global.config.security.jwt;
 
-import com.dungzi.backend.global.common.CommonCode;
 import com.dungzi.backend.global.common.error.AuthException;
-import com.dungzi.backend.global.common.error.CommonErrorCode;
+import com.dungzi.backend.global.common.error.AuthErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -70,7 +69,7 @@ public class JwtTokenProvider {
 //            log.info("jwtTokenProvider getUserPKByServlet token : "+token+", tokenType : "+tokenType);
         }
         catch (AuthException authException){
-            if(authException.getCode() == CommonErrorCode.GUEST_USER){
+            if(authException.getCode() == AuthErrorCode.GUEST_USER){
                 //비회원 사용자 처리 : UserPK값을 null로 반환
                 return null;
             } else {
@@ -91,7 +90,7 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             log.info("jwtTokenProvider getUserPKByToken : {}", e.getMessage());
             e.printStackTrace();
-            throw new AuthException(CommonErrorCode.INVALID_TOKEN); //토큰에서 회원 정보를 확인할 수 없을 때 throw
+            throw new AuthException(AuthErrorCode.INVALID_TOKEN); //토큰에서 회원 정보를 확인할 수 없을 때 throw
         }
 
         log.info("jwtTokenProvider getUserPKByToken userPK : {}", userPK);
@@ -104,7 +103,7 @@ public class JwtTokenProvider {
             token = getToken(httpServletRequest, tokenType);
         }
         catch (AuthException authException){
-            if(authException.getCode() == CommonErrorCode.GUEST_USER){
+            if(authException.getCode() == AuthErrorCode.GUEST_USER){
                 //비회원 사용자 처리
                 return false;
             } else {
@@ -133,6 +132,13 @@ public class JwtTokenProvider {
 //        String token = httpServletRequest.getHeader(tokenType);
         String token = "";
         Cookie[] cookieList = httpServletRequest.getCookies();
+
+        if(cookieList == null || cookieList.length == 0){
+            //가진 쿠키가 없으면 비회원 사용으로 간주함
+            log.info("jwtTokenProvider getToken : cookieList is empty");
+            throw new AuthException(AuthErrorCode.GUEST_USER);
+        }
+
         for(Cookie cookie : cookieList) {
             if(cookie.getName().equals(tokenType)) {
                 token = cookie.getValue();
@@ -142,7 +148,7 @@ public class JwtTokenProvider {
         if(token == null || token.isEmpty()){
             //토큰이 비어있으면 비회원 사용으로 간주함
             log.info("jwtTokenProvider getToken : token is empty");
-            throw new AuthException(CommonErrorCode.GUEST_USER);
+            throw new AuthException(AuthErrorCode.GUEST_USER);
         }
         else{
             log.info("jwtTokenProvider getToken {} : {}", tokenType, token);

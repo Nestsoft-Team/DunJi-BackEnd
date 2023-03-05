@@ -1,8 +1,5 @@
 package com.dungzi.backend.domain.user.domain;
 
-import com.dungzi.backend.domain.chat.domain.UserChatRoom;
-import com.dungzi.backend.domain.user.dto.UserDto;
-import com.dungzi.backend.domain.user.dto.UserResponseDto;
 import com.dungzi.backend.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,14 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "users") // TODO : 언제부터 반영?
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
@@ -31,7 +27,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Type(type = "uuid-char")
     private UUID userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname; //kakao 필수 동의 항목
 
     @Column(nullable = false)
@@ -44,58 +40,25 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String phoneNum;
     private String userType;
     private String gender;
-    private String univName;
-    private Boolean authCheck; //TODO : 컬럼명 변경 고려 - isUnivEmailChecked
 
     //    @Temporal(TemporalType.TIMESTAMP)
     private Date delDate;
+    private boolean isActivated;
 
 //    @Column(nullable = false)
 //    private String token;
 
-    //    @Column(nullable = false)
-//    private String userName;
-
-
-
-    public void updateUnivEmailAuth(String univName, Boolean isChecked) {
-
-        this.univName = univName;
-        this.authCheck = isChecked;
-    }
+//    @Column(nullable = false)
+    private String name;
 
     public void updateRoles(List<String> roles) {
         this.roles = roles;
     }
 
-
-
-    ///-- toDto method --///
-    public UserDto toUserDto() {
-        //TODO : 추후 modelmapper 사용 고려
-        return UserDto.builder()
-                .nickname(this.getNickname())
-                .email(this.getEmail())
-                .ci(this.getCi())
-                .profileImg(this.getProfileImg())
-                .phoneNum(this.getPhoneNum())
-                .userType(this.getUserType())
-                .gender(this.getGender())
-                .authCheck(this.getAuthCheck())
-                .univName(this.getUnivName())
-                .regDate(this.getRegDate())
-                .delDate(this.getDelDate())
-                .build();
+    public void updateNickname(String nickname) {
+//        nicknameOp.ifPresent(nickname -> this.nickname = nickname);
+        this.nickname = nickname;
     }
-
-    public UserResponseDto.UpdateEmailAuth toUpdateEmailAuthResponseDto() {
-        return  UserResponseDto.UpdateEmailAuth.builder()
-                .uuid(this.getUserId().toString())
-                .univName(this.getUnivName())
-                .emailAuthCheck(this.getAuthCheck())
-                .build();
-    }
-
 
     //////////-- set user roles(Authentication) : implements UserDetails --//////////
     @ElementCollection(fetch = FetchType.EAGER)
