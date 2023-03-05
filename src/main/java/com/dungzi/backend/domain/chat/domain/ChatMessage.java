@@ -29,11 +29,8 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 public class ChatMessage {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(nullable = false, length = 36)
-    @Type(type = "uuid-char")
-    private UUID chatMessageId;
+    @GeneratedValue
+    private Long chatMessageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
