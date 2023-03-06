@@ -17,7 +17,7 @@ public class ChatMessageResponseDto {
 
 
     public static String changeDateFormat(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.M.dd. a hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.M.dd a hh:mm");
         return localDateTime.format(formatter);
     }
 
