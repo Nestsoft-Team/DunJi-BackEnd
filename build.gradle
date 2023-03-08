@@ -59,7 +59,7 @@ dependencies {
 
     //chatting
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     //validator
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 

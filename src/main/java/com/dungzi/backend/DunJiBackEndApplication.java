@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @ServletComponentScan
 @EnableJpaAuditing
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.dungzi.backend.domain.*.dao")
+@EnableMongoRepositories(basePackages = "com.dungzi.backend.domain.chat.mongo")
 public class DunJiBackEndApplication {
 
     @PostConstruct
