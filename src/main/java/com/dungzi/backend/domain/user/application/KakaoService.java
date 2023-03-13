@@ -87,7 +87,7 @@ public class KakaoService {
             bw.close();
         } catch (Exception e) {
             log.warn("getKakaoAccessToken failed : {}", e.getMessage());
-//            e.printStackTrace();
+            e.printStackTrace();
             throw new AuthException(AuthErrorCode.KAKAO_FAILED);
         }
 
@@ -193,7 +193,7 @@ public class KakaoService {
 
         } catch (Exception e) {
             log.warn("getKakaoUserInfo failed : {}", e.getMessage());
-//            e.printStackTrace();
+            e.printStackTrace();
             throw new AuthException(AuthErrorCode.KAKAO_FAILED);
         }
 
