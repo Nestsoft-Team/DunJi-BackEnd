@@ -81,4 +81,6 @@ public class UserUtilController {
         authService.updateNickname(requestDto.getNickname());
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
     }
+
+
 }

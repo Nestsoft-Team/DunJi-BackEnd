@@ -128,7 +128,12 @@ public class AuthController {
                 UserAuthResponseDto.CheckNicknameExist.toDto(requestDto.getNickname(), true)));
     }
 
-
+    @Operation(summary = "로그아웃 api", description = "토큰이 저장된 쿠키를 삭제하여 로그아웃")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "로그아웃 성공")
+            }
+    )
     @GetMapping("/logout")
     public ResponseEntity<CommonResponse> logout(HttpServletResponse servletResponse) {
         log.info("[API] auth/logout");
