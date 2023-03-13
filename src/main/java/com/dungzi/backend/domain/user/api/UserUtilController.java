@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,11 +39,11 @@ public class UserUtilController {
             }
     )
     @GetMapping("/profile")
-    public CommonResponse getUserProfile() {
+    public ResponseEntity<CommonResponse> getUserProfile() {
         log.info("[API] users/profile");
         User user = authService.getUserFromSecurity();
         Optional<UnivAuth> univAuthOp = univAuthService.getUnivAuthByUser(user);
-        return CommonResponse.toResponse(CommonCode.OK, UserUtilResponseDto.GetUserProfile.toDto(user, univAuthOp));
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, UserUtilResponseDto.GetUserProfile.toDto(user, univAuthOp)));
     }
 
     @Operation(summary = "대학교 이메일 인증 api", description = "대학교 이메일 인증 정보 저장")
@@ -54,7 +55,7 @@ public class UserUtilController {
             }
     )
     @PutMapping("/univs")
-    public CommonResponse updateUserEmailAuth(@RequestBody @Valid UserRequestDto.UpdateEmailAuth requestDto) {
+    public ResponseEntity<CommonResponse> updateUserEmailAuth(@RequestBody @Valid UserRequestDto.UpdateEmailAuth requestDto) {
         log.info("[API] users/univs");
         User user = authService.getUserFromSecurity();
 
@@ -62,7 +63,7 @@ public class UserUtilController {
         univService.checkUnivDomain(requestDto.getUnivEmail(), univ);
 
         UnivAuth univAuth = univAuthService.updateUserEmailAuth(user, univ, requestDto.getUnivEmail(), requestDto.getIsEmailChecked());
-        return CommonResponse.toResponse(CommonCode.OK, UserUtilResponseDto.UpdateEmailAuth.toDto(user, univAuth));
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, UserUtilResponseDto.UpdateEmailAuth.toDto(user, univAuth)));
     }
 
     @Operation(summary = "닉네임 변경 api", description = "사용자 닉네임 변경")
@@ -74,10 +75,10 @@ public class UserUtilController {
     )
     @Transactional
     @PatchMapping("/nickname")
-    public CommonResponse updateNickname(@RequestBody @Valid UserRequestDto.NicknameOnly requestDto) {
+    public ResponseEntity<CommonResponse> updateNickname(@RequestBody @Valid UserRequestDto.NicknameOnly requestDto) {
         log.info("[API] users/nickname");
         authService.validateNickname(requestDto.getNickname());
         authService.updateNickname(requestDto.getNickname());
-        return CommonResponse.toResponse(CommonCode.OK, null);
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
     }
 }

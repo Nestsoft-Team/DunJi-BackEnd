@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,16 +29,16 @@ public class UnivController {
             }
     )
     @GetMapping("/all")
-    public CommonResponse getUnivAll() {
+    public ResponseEntity<CommonResponse> getUnivAll() {
         log.info("[API] univs/all");
-        return CommonResponse.toResponse(CommonCode.OK,
-                UnivResponseDto.UnivInfo.toUnivInfoList(univService.getUnivAll()));
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK,
+                UnivResponseDto.UnivInfo.toUnivInfoList(univService.getUnivAll())));
     }
 
 
     // TODO : 임시로 만들고 현재 사용하지 않는 API. 추후 관리자 페이지에 대학교 추가 기능이 필요하면 사용
     @PostMapping("")
-    public CommonResponse saveUniv(@RequestBody @Valid UnivRequestDto.UnivInfo requestDto) {
-        return CommonResponse.toResponse(CommonCode.OK, univService.saveUniv(requestDto.toEntity()));
+    public ResponseEntity<CommonResponse> saveUniv(@RequestBody @Valid UnivRequestDto.UnivInfo requestDto) {
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, univService.saveUniv(requestDto.toEntity())));
     }
 }

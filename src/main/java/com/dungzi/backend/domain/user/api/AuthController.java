@@ -65,7 +65,7 @@ public class AuthController {
             }
     )
     @GetMapping("/code")
-    public CommonResponse getAuthCodeEmail(@RequestParam @NotBlank @Email String email, @RequestParam(value = "univ") @NotBlank String univId) throws Exception {
+    public ResponseEntity<CommonResponse> getAuthCodeEmail(@RequestParam @NotBlank @Email String email, @RequestParam(value = "univ") @NotBlank String univId) throws Exception {
         log.info("[API] auth/code");
         univService.checkUnivDomain(email, univId);
         String code = emailService.sendSimpleMessage(email);
@@ -74,7 +74,7 @@ public class AuthController {
                 .email(email)
                 .authCode(code)
                 .build();
-        return CommonResponse.toResponse(CommonCode.OK, response);
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, response));
     }
 
     @Operation(summary = "카카오 회원가입 api", description = "카카오 계정 연동 회원가입")
@@ -90,7 +90,7 @@ public class AuthController {
     )
     @Transactional
     @PostMapping("/kakao")
-    public CommonResponse signUpByKakao(@RequestBody @Valid UserRequestDto.SignUpByKakao requestDto) {
+    public ResponseEntity<CommonResponse> signUpByKakao(@RequestBody @Valid UserRequestDto.SignUpByKakao requestDto) {
         log.info("[API] auth/kakao");
 
         //isUnivAuth == true 일 경우 univId, univEmail 필수값 체크
@@ -109,7 +109,7 @@ public class AuthController {
             univAuthService.createUnivAuth(newUser, univ, requestDto.getUnivEmail(), true);
         }
 
-        return CommonResponse.toResponse(CommonCode.CREATED, UserAuthResponseDto.SignUpByKakao.toDto(newUser));
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.CREATED, UserAuthResponseDto.SignUpByKakao.toDto(newUser)));
     }
 
     @Operation(summary = "닉네임 중복 검사 api", description = "이미 존재하는 닉네임인지 확인하는 api")
@@ -130,10 +130,10 @@ public class AuthController {
 
 
     @GetMapping("/logout")
-    public CommonResponse logout(HttpServletResponse servletResponse) {
+    public ResponseEntity<CommonResponse> logout(HttpServletResponse servletResponse) {
         log.info("[API] auth/logout");
         authService.removeCookieToken(servletResponse);
-        return CommonResponse.toResponse(CommonCode.OK, null);
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
     }
 
 
@@ -206,22 +206,4 @@ public class AuthController {
         }
     }
 
-
-    ///////////TODO : 추후 제거
-    @GetMapping("/login/kakao/login-with-sign-up")
-    public CommonResponse kakaoCallbackLoginWithSignUp(@RequestParam String code, HttpServletResponse httpServletResponse) throws Exception {
-        log.info("[API] auth/login/kakao/login-with-sign-up");
-
-        HashMap<String, String> token = kakaoService.getKakaoAccessToken(code);
-        String kakao_access_token = token.get(ACCESS_TOKEN);
-//        String refresh_token = token.get(REFRESH_TOKEN);
-
-        User kakaoUser = kakaoService.getKakaoUserInfo(kakao_access_token);
-
-        User loginUser = authService.userLoginWithSignUp(kakaoUser);
-
-        authService.setTokenCookieAndSecurityByUser(httpServletResponse, loginUser);
-
-        return CommonResponse.toResponse(CommonCode.OK, loginUser.getUserId());
-    }
 }
