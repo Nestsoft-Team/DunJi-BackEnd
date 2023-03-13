@@ -18,13 +18,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users") // cookie 에서 사용자 정보를 확인하는 api 들
@@ -86,4 +89,19 @@ public class UserUtilController {
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
     }
 
+    @Operation(summary = "프로필 이미지 등록 또는 수정 api", description = "사용자의 프로필 이미지 등록 또는 수정")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "이미지 등록 또는 수정 성공"),
+                    @ApiResponse(responseCode = "400", description = "입력값 관련 오류"),
+                    @ApiResponse(responseCode = "401", description = "사용자 확인 불가")
+            }
+    )
+    @PutMapping("/image")
+    public ResponseEntity<CommonResponse> updateProfileImage(@RequestParam @NotNull MultipartFile profileImg) {
+        log.info("[API] users/image");
+        User user = authService.getUserFromSecurity();
+        userUtilService.updateProfileImage(user, profileImg);
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
+    }
 }

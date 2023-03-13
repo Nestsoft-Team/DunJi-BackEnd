@@ -60,6 +60,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.nickname = nickname;
     }
 
+    public void updateProfileImg(String url){
+        this.profileImg = url;
+    }
+
     //////////-- set user roles(Authentication) : implements UserDetails --//////////
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

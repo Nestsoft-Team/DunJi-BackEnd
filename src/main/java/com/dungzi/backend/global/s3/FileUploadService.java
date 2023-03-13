@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -24,6 +25,31 @@ public class FileUploadService {
     private String bucket;
     private final AmazonS3 amazonS3;
     private static S3Upload s3Upload;
+
+
+    public String uploadProfileImage(UUID uuid, MultipartFile file) {
+        log.info("[S3] Upload profile image");
+        String contentType = "image/jpeg";
+
+        String uploadPath = bucket + "/user/profile";
+
+        String fileName = '/' + uuid.toString(); // 이전 프로필 사진은 덮어쓰기로 삭제됨
+
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(contentType);
+
+            amazonS3.putObject(new PutObjectRequest(bucket, uploadPath+fileName, file.getInputStream(), metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        } catch (AmazonServiceException | IOException e) {
+            log.error("[S3] Profile image Upload Error.");
+            e.printStackTrace();
+        }
+
+        return amazonS3.getUrl(bucket, uploadPath+fileName).toString(); // 저장된 파일 url 찾아서 반환
+    }
+
 
     public void uploadRoomFile(String RoomID, List<MultipartFile> file) {
         log.info("[S3] Upload File");
