@@ -140,13 +140,6 @@ public class AuthService {
                 });
     }
 
-    public void updateNickname(String nickname) {
-        log.info("[SERVICE] updateNickname");
-        User user = getUserFromSecurity();
-        user.updateNickname(nickname);
-        userDao.save(user);
-    }
-
     public void validateNickname(String nickname) {
         if(nickname.length() < 2 || nickname.length() > 12){
             log.info("validateNickname : too long or too short");

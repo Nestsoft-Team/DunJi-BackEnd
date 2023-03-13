@@ -5,6 +5,7 @@ import com.dungzi.backend.domain.univ.application.UnivService;
 import com.dungzi.backend.domain.univ.domain.Univ;
 import com.dungzi.backend.domain.univ.domain.UnivAuth;
 import com.dungzi.backend.domain.user.application.AuthService;
+import com.dungzi.backend.domain.user.application.UserUtilService;
 import com.dungzi.backend.domain.user.domain.User;
 import com.dungzi.backend.domain.user.dto.UserRequestDto;
 import com.dungzi.backend.domain.user.dto.UserUtilResponseDto;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -28,6 +30,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/users") // cookie 에서 사용자 정보를 확인하는 api 들
 public class UserUtilController {
     private final AuthService authService;
+    private final UserUtilService userUtilService;
     private final UnivService univService;
     private final UnivAuthService univAuthService;
 
@@ -78,9 +81,9 @@ public class UserUtilController {
     public ResponseEntity<CommonResponse> updateNickname(@RequestBody @Valid UserRequestDto.NicknameOnly requestDto) {
         log.info("[API] users/nickname");
         authService.validateNickname(requestDto.getNickname());
-        authService.updateNickname(requestDto.getNickname());
+        User user = authService.getUserFromSecurity();
+        userUtilService.updateNickname(user, requestDto.getNickname());
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, null));
     }
-
 
 }
