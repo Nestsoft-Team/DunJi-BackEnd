@@ -23,11 +23,11 @@ public class StompController {
     private final SimpMessageSendingOperations messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final StompService stompService;
-
-    @GetMapping("/test")
-    public String test() {
-        return "websocket.html";
-    }
+//
+//    @GetMapping("/chat")
+//    public String home() {
+//        return "websocket.html";
+//    }
 
     @MessageMapping("/chat/message")
     public void message(ChatMessageRequestDto messageSendDto, Message message) {
