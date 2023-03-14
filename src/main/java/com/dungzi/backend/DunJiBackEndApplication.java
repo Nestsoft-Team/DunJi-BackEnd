@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.dungzi.backend.domain.*.dao")
-@EnableMongoRepositories(basePackages = "com.dungzi.backend.domain.chat.mongo")
+@EnableMongoRepositories(basePackages = "com.dungzi.backend.domain.chat.dao.mongo")
 public class DunJiBackEndApplication {
 
     @PostConstruct

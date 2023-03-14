@@ -1,6 +1,6 @@
 package com.dungzi.backend.domain.chat.application;
 
-import com.dungzi.backend.domain.chat.dao.ChatMessageDao;
+import com.dungzi.backend.domain.chat.dao.mongo.ChatMessageDao;
 import com.dungzi.backend.domain.chat.dao.ChatRoomDao;
 import com.dungzi.backend.domain.chat.domain.ChatMessage;
 import com.dungzi.backend.domain.chat.domain.ChatRoom;
@@ -8,6 +8,7 @@ import com.dungzi.backend.domain.chat.domain.ChatMessageType;
 import com.dungzi.backend.domain.chat.dto.ChatMessageRequestDto;
 import com.dungzi.backend.domain.chat.dto.ChatMessageResponseDto;
 import com.dungzi.backend.domain.user.domain.User;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,11 +33,14 @@ public class ChatMessageService {
         ChatRoom chatRoom = chatRoomDao.findById(messageSendDto.getChatRoomId()).get();
 
         ChatMessage chatMessage = ChatMessage.builder()
-                .chatRoom(chatRoom)
+                .chatRoomId(chatRoom.getChatRoomId().toString())
                 .content(messageSendDto.getContent())
+                .senderNickName(sender.getNickname())
                 .chatMessageType(ChatMessageType.MESSAGE)
-                .sender(sender)
+                .senderId(sender.getUserId().toString())
+                .sendDate(LocalDateTime.now())
                 .build();
+
         log.info("채팅 메세지:{}, 보낸 유저:{}, 채팅방:{}", messageSendDto.getContent(), sender.getNickname(),
                 chatRoom.getChatRoomId());
         ChatMessage savedChatMessage = chatMessageDao.save(chatMessage);
@@ -45,7 +49,8 @@ public class ChatMessageService {
 
     public List<ChatMessageResponseDto> findAllChatMessage(String roomId, Pageable pageable) {
         ChatRoom chatRoom = chatRoomDao.findById(UUID.fromString(roomId)).get();
-        Page<ChatMessage> byChatRoomOrderBySendDateAsc = chatMessageDao.findByChatRoomOrderBySendDateDesc(chatRoom,
+        Page<ChatMessage> byChatRoomOrderBySendDateAsc = chatMessageDao.findByChatRoomIdOrderByIdDesc(
+                chatRoom.getChatRoomId().toString(),
                 pageable);
         return changeToResponseDto(byChatRoomOrderBySendDateAsc);
     }
@@ -54,7 +59,7 @@ public class ChatMessageService {
         List<ChatMessageResponseDto> response = new ArrayList<>();
         response.addAll(byChatRoomOrderBySendDateAsc.stream()
                 .map(chatMessage -> ChatMessageResponseDto.builder()
-                        .sender(chatMessage.getSender().getNickname())
+                        .sender(chatMessage.getSenderNickName())
                         .content(chatMessage.getContent())
                         .messageType(chatMessage.getChatMessageType().getType())
                         .sendDate(ChatMessageResponseDto.changeDateFormat(chatMessage.getSendDate()))

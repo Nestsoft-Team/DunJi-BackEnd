@@ -1,8 +1,6 @@
 package com.dungzi.backend.domain.chat.api;
 
 import com.dungzi.backend.domain.chat.application.ChatMessageService;
-import com.dungzi.backend.domain.chat.dao.ChatMessageDao;
-import com.dungzi.backend.domain.chat.dao.ChatRoomDao;
 import com.dungzi.backend.domain.chat.domain.ChatRoom;
 import com.dungzi.backend.domain.chat.application.ChatRoomService;
 import com.dungzi.backend.domain.chat.domain.ChatRoomType;

@@ -18,33 +18,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "chat_message")
 @Getter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class ChatMessage {
     @Id
-    @GeneratedValue
-    private Long chatMessageId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
-
-    @Enumerated(value = EnumType.STRING)
+    private String id;
+    private String chatRoomId;
     private ChatMessageType chatMessageType;
-
     private String content;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private User sender;
-
-    @CreationTimestamp
+    private String senderId;
+    private String senderNickName;
     private LocalDateTime sendDate;
 }

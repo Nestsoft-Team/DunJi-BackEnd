@@ -25,7 +25,7 @@ public class ChatMessageResponseDto {
         ChatMessageResponseDto messageReceiveDto = ChatMessageResponseDto.builder()
                 .sendDate(ChatMessageResponseDto.changeDateFormat(chatMessage.getSendDate()))
                 .content(chatMessage.getContent())
-                .sender(chatMessage.getSender().getNickname())
+                .sender(chatMessage.getSenderNickName())
                 .messageType(ChatMessageType.MESSAGE.getType())
                 .build();
         return messageReceiveDto;
