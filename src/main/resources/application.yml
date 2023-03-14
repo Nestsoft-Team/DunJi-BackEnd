@@ -9,6 +9,15 @@ spring:
     url: jdbc:mysql://dunzi-database-2.c0qdci4sjpq3.ap-northeast-2.rds.amazonaws.com/dunzi?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+  data:
+    mongodb:
+      host: 13.124.52.198
+      port: 27017
+      authentication-database: admin
+      username: root
+      password: sptmxmthvmxm
+      database: dankan
 #spring:
 #  # H2 Setting Info (H2 Console에 접속하기 위한 설정정보 입력)
 #  h2:

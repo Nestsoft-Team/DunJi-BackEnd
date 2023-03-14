@@ -16,6 +16,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -36,23 +38,21 @@ public class ChatController {
             }
     )
     @PostMapping("/room")
-    public CommonResponse createChatRoom(@RequestBody ChatRoomRequestDto.CreateChatRoom body) {
+    public ResponseEntity<CommonResponse> createChatRoom(@RequestBody ChatRoomRequestDto.CreateChatRoom body) {
         String opponentNickName = body.getOpponentUserName();
 
         //기존의 채팅방이 있는경우
         Optional<ChatRoom> existChatRoom = chatRoomService.findExistRoom(opponentNickName);
         if (existChatRoom.isPresent()) {
-            return CommonResponse.toResponse(
-                    CommonCode.OK,
-                    ChatRoomResponseDto.CreateChatRoom.builder()
-                            .chatRoomId(existChatRoom.get().getChatRoomId()).build());
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(CommonResponse.toResponse(CommonCode.OK, ChatRoomResponseDto.CreateChatRoom.builder().chatRoomId(existChatRoom.get().getChatRoomId()).build()));
         }
 
         ChatRoom createdRoom = chatRoomService.createChatRoom(opponentNickName);
-        return CommonResponse.toResponse(
-                CommonCode.CREATED,
-                ChatRoomResponseDto.CreateChatRoom.builder()
-                        .chatRoomId(createdRoom.getChatRoomId()).build());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(CommonResponse.toResponse(CommonCode.CREATED, ChatRoomResponseDto.CreateChatRoom.builder().chatRoomId(createdRoom.getChatRoomId()).build()));
     }
 
     @Operation(summary = "채팅방 삭제 api", description = "채팅방 삭제 API"
@@ -63,9 +63,11 @@ public class ChatController {
             }
     )
     @DeleteMapping("/room/{chatRoomId}")
-    public CommonResponse deleteChatRoom(@PathVariable String chatRoomId) {
+    public ResponseEntity<CommonResponse> deleteChatRoom(@PathVariable String chatRoomId) {
         chatRoomService.deleteChatRoom(chatRoomId);
-        return CommonResponse.toResponse(CommonCode.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.toResponse(CommonCode.OK));
     }
 
     @Operation(summary = "채팅방 조회 api", description = "Type은 두가지만 가능합니다.\n"
@@ -77,9 +79,11 @@ public class ChatController {
             }
     )
     @GetMapping("/room")
-    public CommonResponse selectChatRoom(@RequestParam("type") String seek) {
+    public ResponseEntity<CommonResponse> selectChatRoom(@RequestParam("type") String seek) {
         List<ChatRoomResponseDto.UsersChatRooms> response = chatRoomService.findChatRoomsBySeekType(ChatRoomType.findByType(seek));
-        return CommonResponse.toResponse(CommonCode.OK,response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.toResponse(CommonCode.OK,response));
     }
 
     @Operation(summary = "채팅방 메세지 조회 api", description = "채팅방 메세지를 조회힙니다."
@@ -97,8 +101,10 @@ public class ChatController {
             }
     )
     @GetMapping("/message")
-    public CommonResponse findMessage(@RequestParam("roomId") String roomId, Pageable pageable) {
-        return CommonResponse.toResponse(CommonCode.OK,chatMessageService.findAllChatMessage(roomId, pageable));
+    public ResponseEntity<CommonResponse> findMessage(@RequestParam("roomId") String roomId, Pageable pageable) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.toResponse(CommonCode.OK, chatMessageService.findAllChatMessage(roomId, pageable)));
     }
 
 

@@ -28,13 +28,9 @@ public class ChatRoom {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column( nullable = false,length = 36)
+    @Column(nullable = false, length = 36)
     @Type(type = "uuid-char")
     private UUID chatRoomId;
-
-    @OneToMany(mappedBy = "chatRoom",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
 
 
 }

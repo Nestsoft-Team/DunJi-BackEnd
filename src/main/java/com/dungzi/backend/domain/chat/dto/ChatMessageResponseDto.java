@@ -1,13 +1,9 @@
 package com.dungzi.backend.domain.chat.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.dungzi.backend.domain.chat.domain.ChatMessage;
+import com.dungzi.backend.domain.chat.domain.ChatMessageType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,7 +17,17 @@ public class ChatMessageResponseDto {
 
 
     public static String changeDateFormat(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.M.dd. a hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.M.dd a hh:mm");
         return localDateTime.format(formatter);
+    }
+
+    public static ChatMessageResponseDto toChatMessageResponseDto(ChatMessage chatMessage) {
+        ChatMessageResponseDto messageReceiveDto = ChatMessageResponseDto.builder()
+                .sendDate(ChatMessageResponseDto.changeDateFormat(chatMessage.getSendDate()))
+                .content(chatMessage.getContent())
+                .sender(chatMessage.getSenderNickName())
+                .messageType(ChatMessageType.MESSAGE.getType())
+                .build();
+        return messageReceiveDto;
     }
 }

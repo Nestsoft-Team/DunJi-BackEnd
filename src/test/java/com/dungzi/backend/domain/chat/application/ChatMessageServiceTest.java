@@ -59,7 +59,7 @@ class ChatMessageServiceTest {
         //when
         when(chatRoomDao.findById(messageSendDto.getChatRoomId())).thenReturn(Optional.of(chatRoom));
         ChatMessage savedChatMessage = ChatMessage.builder()
-                .chatMessageId(UUID.randomUUID())
+                .chatMessageId(1L)
                 .chatRoom(chatRoom)
                 .content(messageSendDto.getContent())
                 .chatMessageType(ChatMessageType.MESSAGE)
